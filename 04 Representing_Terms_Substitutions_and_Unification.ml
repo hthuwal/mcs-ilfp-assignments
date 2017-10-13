@@ -62,3 +62,10 @@ let rec size (t : term) = match t with
 							(* a symbol with arity > 0 *)
 							else 1 + List.fold_left (fun a b -> a + (size b)) 0 tlist
 ;;
+
+
+let rec vars (t: term) = match t with
+	V v -> [v]
+	| Node (symb, tlist) -> if List.length tlist = 0 then []
+							else List.fold_left (fun a b -> union a (vars b)) [] tlist 
+;;
