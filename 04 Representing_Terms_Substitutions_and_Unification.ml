@@ -44,3 +44,11 @@ let rec ht (t : term) = match t with
 							else 1 + List.fold_left (fun a b -> max (ht b) a) 0 tlist
 ;;
 
+
+(* size : Given a well formed term returns its size (number of nodes)*)
+let rec size (t : term) = match t with
+	V v -> 1 (* if this is a variable *)
+	| Node (symb, tlist) -> if List.length tlist = 0 then 1 (* if this is a constant *)
+							(* a symbol with arity > 0 *)
+							else 1 + List.fold_left (fun a b -> (size b) + a) 0 tlist
+;;
