@@ -1,5 +1,5 @@
-type variable = string;;
 type symbol = string;;
+type variable = string;;
 type term = V of variable | Node of symbol * term list;;
 type arity = int;;
 type signature = (symbol * arity) list;;
@@ -73,14 +73,11 @@ let rec vars (t: term) = match t with
 ;;
 
 
-(* List of (variable, term) pairs where each pair denotes that variable should be replaced by term *)
+(* List of (variable, term) pairs where each pair denotes which variable should be replaced which by term *)
 type substitution = (variable * term) list;;
 
 
-(* composition of two substitution will result in a new substitution *)
-type substitution_composition = substitution;;
-
-
+(* subst :  given a term t and a substitution s, applies the (Unique Homomorphic Extension of) s to t. *)
 let rec subst (t:term) (sub:substitution) = match t with
 	(* if this is variable and a substitution exists for it then do it *)
 	V x ->  (try List.assoc x sub with
