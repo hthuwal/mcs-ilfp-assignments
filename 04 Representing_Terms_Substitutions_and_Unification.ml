@@ -9,7 +9,7 @@ type signature = (symbol * arity) list;;
 it checks whether the signature is a valid signature (no repeated symbols,
 arities are non-negative etc. *)
 
-let check_sig sign =
+let check_sig (sign : signature) =
 	(* Checking atleast one element with 0 arity *)
 	List.exists (fun x -> if snd x == 0 then true else false) sign &&
 	(* Checking no one element with negative arity *)
