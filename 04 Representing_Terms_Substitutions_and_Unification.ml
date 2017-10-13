@@ -34,3 +34,11 @@ let rec wfterm (t : term) (s : signature) = match t with
 							else true 
 ;;
 
+
+(* ht : Given a well formed tree returns its height. Leaves are at heiight 0 *)
+let rec ht (t : term) = match t with
+	V v -> 0
+	| Node (symb, tlist) -> if List.length tlist = 0 then 0
+							else 1 + List.fold_left (fun a b -> let htb = ht b in if a > htb then a else htb) 0 tlist
+;;
+
