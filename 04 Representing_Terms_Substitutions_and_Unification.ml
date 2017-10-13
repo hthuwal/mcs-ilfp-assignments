@@ -89,3 +89,30 @@ let rec subst (t:term) (sub:substitution) = match t with
 
 (* substitution_composition : composition of two substitutions returns a subtitution *)
 let rec substitution_composition sub1 sub2 =  sub2 @ (List.map ((fun sub lone_sub -> (fst lone_sub, subst (snd lone_sub) sub)) sub2) sub1);;
+
+
+exception NOT_UNIFIABLE;;
+
+
+(* mgu : given two terms t1 and t2, returns their most general unifier, 
+if it exists and otherwise raises an exception NOT_UNIFIABLE.*)
+let rec mgu t1 t2 = match (t1, t2) with
+	(* if both are variables *)
+	(V x, V y) -> if y = x then [] else [(x,V y)]
+	(* if both are constants *)
+	|(Node (symb1, []), Node (symb2, [])) -> if symb1 = symb2 then [] else raise NOT_UNIFIABLE
+	(* 1 var and 1 constant *)
+	|(V x, Node (symb2, [])) -> [(x, t2)]
+	|(Node (symb1, []), V y) -> [(y, t1)]
+	(* 1 variable and 1 non const symb *)
+	|(V x, Node (symb, tlist))
+	|(Node (symb, tlist), V x) -> (* If occurs check fails *)
+								   if List.exists (fun tl -> List.mem x (vars tl)) tlist then raise NOT_UNIFIABLE
+		   						   (* if occurs check passes *)
+		   						   else [(x, Node(symb, tlist))]
+
+    |(Node (symb1, tlist1), Node (symb2, tlist2)) -> 
+    		if symb1 != symb2 && List.length tlist1 != List.length tlist2 then raise NOT_UNIFIABLE
+ 			else 
+ 			   List.fold_left2 (fun s t u -> substitution_composition s (mgu (subst t s) (subst u s))) [] tlist1 tlist2
+	;;
