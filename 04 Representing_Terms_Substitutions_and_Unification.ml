@@ -64,8 +64,10 @@ let rec size (t : term) = match t with
 ;;
 
 
+(* vars : Given a well formed term returns set of variables used in it*)
 let rec vars (t: term) = match t with
-	V v -> [v]
-	| Node (symb, tlist) -> if List.length tlist = 0 then []
+	V v -> [v] (* if this term is variable then return the variable *)
+	| Node (symb, tlist) -> if List.length tlist = 0 then [] (* if this is a constant term then return an empty list*)
+							(* a symbol with arity > 0, return union of variables used int childrens *)
 							else List.fold_left (fun a b -> union a (vars b)) [] tlist 
 ;;
