@@ -41,6 +41,6 @@ let rec ht (t : term) = match t with
 	V v -> 0 (* if this is a variable *)
 	| Node (symb, tlist) -> if List.length tlist = 0 then 0 (* if this is a constant *)
 							(* a symbol with arity > 0 *)
-							else 1 + List.fold_left (fun a b -> let htb = ht b in max a htb) 0 tlist
+							else 1 + List.fold_left (fun a b -> max (ht b) a) 0 tlist
 ;;
 
