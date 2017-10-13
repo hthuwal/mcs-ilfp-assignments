@@ -71,3 +71,20 @@ let rec vars (t: term) = match t with
 							(* a symbol with arity > 0, return union of variables used int childrens *)
 							else List.fold_left (fun a b -> union a (vars b)) [] tlist 
 ;;
+
+
+(* List of (variable, term) pairs where each pair denotes that variable should be replaced by term *)
+type substitution = (variable * term) list;;
+
+
+(* composition of two substitution will result in a new substitution *)
+type substitution_composition = substitution;;
+
+
+let rec subst (t:term) (sub:substitution) = match t with
+	(* if this is variable and a substitution exists for it then do it *)
+	V x ->  (try List.assoc x sub with
+			 |Not_found -> t)
+	| Node (symb, tlist) -> if List.length tlist = 0 then t
+					  		else Node (symb, List.map ((fun s t -> subst t s) sub) tlist)
+;;
