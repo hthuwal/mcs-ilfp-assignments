@@ -21,3 +21,16 @@ let check_sig (sign : signature) =
 				  else no_duplicates xs ((fst x)::old_s) in
 	no_duplicates sign []
 ;;
+
+
+(* wfterm : Given a valid signature (checked using check_sig)
+checks that a given preterm is well-formed according to the signature.
+*)
+let rec wfterm (t : term) (s : signature) = match t with
+	V v -> true
+	| Node (symb, tlist) -> List.mem (symb, List.length tlist) s &&
+							if List.length tlist <> 0 
+							then List.for_all (fun x -> if wfterm x s then true else false) tlist
+							else true 
+;;
+
