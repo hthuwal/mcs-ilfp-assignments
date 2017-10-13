@@ -87,5 +87,5 @@ let rec subst (t:term) (sub:substitution) = match t with
 ;;
 
 
-(* compose : composition of two substitutions returns a subtitution *)
-let rec compose sub1 sub2 =  sub2 @ (List.map ((fun sub lone_sub -> (fst lone_sub, subst (snd lone_sub) sub)) sub2) sub1);;
+(* substitution_composition : composition of two substitutions returns a subtitution *)
+let rec substitution_composition sub1 sub2 =  sub2 @ (List.map ((fun sub lone_sub -> (fst lone_sub, subst (snd lone_sub) sub)) sub2) sub1);;
