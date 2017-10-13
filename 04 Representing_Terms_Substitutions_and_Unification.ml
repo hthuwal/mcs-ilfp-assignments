@@ -4,6 +4,16 @@ type term = V of variable | Node of symbol * term list;;
 type arity = int;;
 type signature = (symbol * arity) list;;
 
+(* Inert element a in set s *)
+let insert a s = if List.mem a s then s else s @ a::[] ;; 
+
+
+(**** Union ****)
+let rec union s1 s2 = match s1 with 
+                      [] -> s2
+                      | x::xs -> insert x (union xs s2)
+;;
+
 
 (* check_sig : Given a signature consisting of symbols and their arities (>= 0)
 it checks whether the signature is a valid signature (no repeated symbols,
