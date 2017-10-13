@@ -27,18 +27,20 @@ let check_sig (sign : signature) =
 checks that a given preterm is well-formed according to the signature.
 *)
 let rec wfterm (t : term) (s : signature) = match t with
-	V v -> true
-	| Node (symb, tlist) -> List.mem (symb, List.length tlist) s &&
-							if List.length tlist <> 0 
+	V v -> true (* A variable is a well formed term *)
+	| Node (symb, tlist) -> List.mem (symb, List.length tlist) s && (* this symbol has #children == its arity *)
+							if List.length tlist <> 0 (* if this symbol has children *)
+							(* Each of the children must be well formed *)
 							then List.for_all (fun x -> if wfterm x s then true else false) tlist
 							else true 
 ;;
 
 
-(* ht : Given a well formed tree returns its height. Leaves are at heiight 0 *)
+(* ht : Given a well formed term returns its height. Leaves are at heiight 0 *)
 let rec ht (t : term) = match t with
-	V v -> 0
-	| Node (symb, tlist) -> if List.length tlist = 0 then 0
-							else 1 + List.fold_left (fun a b -> let htb = ht b in if a > htb then a else htb) 0 tlist
+	V v -> 0 (* if this is a variable *)
+	| Node (symb, tlist) -> if List.length tlist = 0 then 0 (* if this is a constant *)
+							(* a symbol with arity > 0 *)
+							else 1 + List.fold_left (fun a b -> let htb = ht b in max a htb) 0 tlist
 ;;
 
