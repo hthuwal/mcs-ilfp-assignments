@@ -41,7 +41,7 @@ let rec resolve g program = match program with
 let rec solve_bfs goal program = match goal with
 [] -> 1 (* if no goal left then we have resolved all goals, return true *)
 |x::xs -> let results = resolve x program in (* try this goal with all rules *)
-		  let hc b res = if fst res = true then b + solve_bfs (xs@(snd res)) program else b + 0 in
+		  let hc b res = if fst res = true then b + solve_bfs (xs@(snd res)) program else b in
 		  List.fold_left hc 0 results (* solve recursively for rest of goals wherever this goal is resolved*)
 ;;
 
@@ -53,6 +53,6 @@ let rec solve_bfs goal program = match goal with
 let rec solve_dfs goal program = match goal with
 [] -> 1 (* if no goal left then we have resolved all goals, return true *)
 |x::xs -> let results = resolve x program in (* try this goal with all rules *)
-		  let hc b res = if fst res = true then b + solve_dfs ((snd res)@xs) program else b + 0 in
+		  let hc b res = if fst res = true then b + solve_dfs ((snd res)@xs) program else b in
 		  List.fold_left hc 0 results (* solve recursively for rest of goals wherever this goal is resolved*)
 ;;
