@@ -45,4 +45,7 @@ let rec solve_dfs goal program = match goal with
 (* Solve bredth first a list of goals using a program *)
 let rec solve_bfs goal program = match goal with
 [] -> true
-|x::xs ->  *)
+|x::xs -> let results = resolve x program in
+		  let hc b res = if fst res = true then b || solve_bfs ((snd res)@xs) program else b || false in
+		  List.fold_left hc false results
+;;
