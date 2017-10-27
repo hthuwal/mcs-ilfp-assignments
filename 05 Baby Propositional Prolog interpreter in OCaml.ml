@@ -20,14 +20,15 @@ type goal = atom list;;
 *  and (false, []) if resolution is not possible
 *)
 let rec resolve g program = match program with
-[] -> []
+[] -> [] (* if no rule left return empty list *)
 |x::xs -> match x with
-		  Fact y -> if y = g 
-          				then [(true, [])]@resolve g xs 
-		  			else [(false, [])]@resolve g xs 
-		 |Rule y -> if fst y = g 
-          				then [(true, snd y)]@resolve g xs 
-		  			else [(false, [])]@resolve g xs 
+		  Fact y -> if y = g  (* if fact matches the goal then can be resolved*)
+          				then [(true, [])]@resolve g xs  (* return true and empty subgoal, try with other rules *)
+		  			else [(false, [])]@resolve g xs  (* can't be resolved with this fact return false, try other rules *)
+
+		 |Rule y -> if fst y = g  (* if the head of rule matches the goal can be resolved *)
+          				then [(true, snd y)]@resolve g xs (* return true and body of rule as subgoal, try other rules *)
+		  			else [(false, [])]@resolve g xs (* can't be resolved with this rule return false, try other rules *)
 		  
 ;;
 
@@ -35,17 +36,17 @@ let rec resolve g program = match program with
 
 (* Solve depth first a list of goals using a program *)
 let rec solve_dfs goal program = match goal with
-[] -> true
-|x::xs -> let results = resolve x program in
+[] -> true (* if no goal left then we have resolved all goals, return true *)
+|x::xs -> let results = resolve x program in (* try this goal with all rules *)
 		  let hc b res = if fst res = true then b || solve_dfs (xs@(snd res)) program else b || false in
-		  List.fold_left hc false results
+		  List.fold_left hc false results (* solve recursively for rest of goals wherever this goal is resolved*)
 ;;
 
 
 (* Solve bredth first a list of goals using a program *)
 let rec solve_bfs goal program = match goal with
-[] -> true
-|x::xs -> let results = resolve x program in
+[] -> true (* if no goal left then we have resolved all goals, return true *)
+|x::xs -> let results = resolve x program in (* try this goal with all rules *)
 		  let hc b res = if fst res = true then b || solve_bfs ((snd res)@xs) program else b || false in
-		  List.fold_left hc false results
+		  List.fold_left hc false results (* solve recursively for rest of goals wherever this goal is resolved*)
 ;;
