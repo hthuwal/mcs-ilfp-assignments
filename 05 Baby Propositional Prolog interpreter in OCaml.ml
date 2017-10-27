@@ -1,18 +1,17 @@
 (* head is also a single atom *)
 type atom = P of string;; 
 
-(* 
-   Clause can either be a fact or a rule
-   rule has head and body 
-   Empty body implies a fact
-*)
+(* rule has head and body *)
+type rule = atom * (atom list);;
 
-type clause = atom * (atom list);; 
+(* clause is either a fact or a rule*)
+type clause = Fact of atom | Rule of rule;;
 
-(* Program is a set of clauses *)
+(* program is a list of clauses *)
 type program = clause list;;
 
 (* Goal is a list of atoms *)
+type goal = atom list;;
 
 
 (* Resolve a single goal g with all rules in program .
@@ -22,9 +21,14 @@ type program = clause list;;
 *)
 let rec resolve g program = match program with
 [] -> []
-|x::xs -> if fst x = g 
-          	then [(true, snd x)]@resolve g xs 
-		  else [(false, [])]@resolve g xs 
+|x::xs -> match x with
+		  Fact y -> if y = g 
+          				then [(true, [])]@resolve g xs 
+		  			else [(false, [])]@resolve g xs 
+		 |Rule y -> if fst y = g 
+          				then [(true, snd y)]@resolve g xs 
+		  			else [(false, [])]@resolve g xs 
+		  
 ;;
 
 (* let rec solve goal program = match goal with
