@@ -29,10 +29,13 @@ let rs2 = Rule (P "q", [P "t";]);;
 let rs3 = Rule (P "r", [P "z"]);;
 
 let ps1 = [fs1; fs2; fs3; rs1; rs2];;
+let ps2 = [rs3; rs2; fs2];;
 
 let gs1 = [P "s"; P "q"];;
 
 let gs2 = [P "z"];;
+
+let gs3 = [P "q"];;
 
 (* Should return true *)
 Printf.printf "%i\n" (solve_dfs gs1 ps1);;
@@ -55,3 +58,8 @@ Printf.printf "%i\n" (solve_bfs [] ps1);;
 (* Should return false *)
 Printf.printf "%i\n" (solve_dfs gs1 []);;
 Printf.printf "%i\n" (solve_bfs gs1 []);;
+
+
+(* Should return false *)
+Printf.printf "%i\n" (solve_dfs gs3 ps2);;
+Printf.printf "%i\n" (solve_bfs gs3 ps2);;
