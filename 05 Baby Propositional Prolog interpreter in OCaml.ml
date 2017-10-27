@@ -34,19 +34,25 @@ let rec resolve g program = match program with
 
 
 
-(* Solve depth first a list of goals using a program *)
+(* Solve breadth first a list of goals using a program 
+* return number of ways resolution is possible
+* 0 if resolution is not possible 
+*)
 let rec solve_bfs goal program = match goal with
-[] -> true (* if no goal left then we have resolved all goals, return true *)
+[] -> 1 (* if no goal left then we have resolved all goals, return true *)
 |x::xs -> let results = resolve x program in (* try this goal with all rules *)
-		  let hc b res = if fst res = true then b || solve_bfs (xs@(snd res)) program else b || false in
-		  List.fold_left hc false results (* solve recursively for rest of goals wherever this goal is resolved*)
+		  let hc b res = if fst res = true then b + solve_bfs (xs@(snd res)) program else b + 0 in
+		  List.fold_left hc 0 results (* solve recursively for rest of goals wherever this goal is resolved*)
 ;;
 
 
-(* Solve bredth first a list of goals using a program *)
+(* Solve depth first a list of goals using a program 
+* return number of ways resolution is possible
+* 0 if resolution is not possible 
+*)
 let rec solve_dfs goal program = match goal with
-[] -> true (* if no goal left then we have resolved all goals, return true *)
+[] -> 1 (* if no goal left then we have resolved all goals, return true *)
 |x::xs -> let results = resolve x program in (* try this goal with all rules *)
-		  let hc b res = if fst res = true then b || solve_dfs ((snd res)@xs) program else b || false in
-		  List.fold_left hc false results (* solve recursively for rest of goals wherever this goal is resolved*)
+		  let hc b res = if fst res = true then b + solve_dfs ((snd res)@xs) program else b + 0 in
+		  List.fold_left hc 0 results (* solve recursively for rest of goals wherever this goal is resolved*)
 ;;
