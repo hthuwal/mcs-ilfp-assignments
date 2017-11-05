@@ -72,5 +72,17 @@ let rec mgu (t1:term) (t2:term) = match (t1, t2) with
  			else 
  			   List.fold_left2 (fun s t u -> substitution_composition s (mgu (subst t s) (subst u s))) [] tlist1 tlist2
 	;;
+
+(*  pretending the predicate symbol is a function symbol, *)
+let rec att (x:atomic_formula) = match x with
+	Atom (a,b) -> Node (a,b)
+;;
+
+exception WRONG_USAGE;;
+
+(* Converting a pretending symbol back to predicate *)
+let rec tta (x:term) = match x with
+	Node(a,b) -> Atom(a,b)
+	|_ -> raise WRONG_USAGE
 ;;
 
