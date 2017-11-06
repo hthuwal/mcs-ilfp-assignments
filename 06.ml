@@ -99,9 +99,10 @@ let rec print_subst (x:substitution) = match x with
 	|x::xs -> print_string (fst x); print_string " -> "; print_term (snd x)
 ;;
 
+exception END
 (* Solve a set of goal clauses with given program clauses *)
 let rec solve (goals:goal) (prog:program) (mgus:substitution)= match goals with
- [] -> print_subst mgus;true
+ [] -> print_subst mgus; true
 |g0::rest-> let rec resolve (g:atomic_formula) (pr:program) (mgs:substitution) = (match pr with
 			  [] -> false
 			  |p::ps -> (match p with
@@ -109,9 +110,10 @@ let rec solve (goals:goal) (prog:program) (mgus:substitution)= match goals with
 						  				let unifier = mgu (att f) (att g) in (* mgu of f and g by pretending they are function symbol *)
 						  				let newgoal = List.map ((fun a t -> subst t a) unifier) (List.map att rest) in
 						  				if solve (List.map tta newgoal) prog (mgs@unifier) then
+						  					(print_string "true\n" ;
 						  					let wait = read_line() in
-						  					if (wait = ".") then true
-						  					else resolve g ps mgs
+						  					if (wait = ";") then resolve g ps mgs
+						  					else raise_notrace END)
 						  				else resolve g ps mgs
 						  			  with
 						  			  | NOT_UNIFIABLE -> resolve g ps mgs;
@@ -122,9 +124,10 @@ let rec solve (goals:goal) (prog:program) (mgus:substitution)= match goals with
 				   						let newgoal = union (List.map ((fun a t -> subst t a) unifier) (List.map att rest)) 
 				   											(List.map ((fun a t -> subst t a) unifier) (List.map att (snd r))) in
 				   						if solve (List.map tta newgoal) prog (mgs@unifier) then
+					   						(print_string "true\n" ;
 				   							let wait = read_line() in
-						  					if (wait = ".") then true 
-						  					else resolve g ps mgs 
+						  					if (wait = ";") then resolve g ps mgs
+						  					else raise_notrace END)
 				   						else resolve g ps mgs
 				   					   with
 				   					   | NOT_UNIFIABLE -> resolve g ps mgs;
@@ -133,5 +136,5 @@ let rec solve (goals:goal) (prog:program) (mgus:substitution)= match goals with
 		    ) in resolve g0 prog mgus
 ;;
 
-(* prolog solver*)
-let prolog (goals:goal) (prog:program) = solve goals prog [];;
+(* prolog solver.. presee ';' for more outputs and any other key for exiting*)
+let prolog (goals:goal) (prog:program) = if solve goals prog [] then print_endline "" else print_endline "false";;
