@@ -108,7 +108,10 @@ let rec solve (goals:goal) (prog:program) (mgus:substitution)= match goals with
 						  	Fact f -> (try 
 						  				let unifier = mgu (att f) (att g) in (* mgu of f and g by pretending they are function symbol *)
 						  				let newgoal = List.map ((fun a t -> subst t a) unifier) (List.map att rest) in
-						  				if solve (List.map tta newgoal) prog (mgs@unifier) then true
+						  				if solve (List.map tta newgoal) prog (mgs@unifier) then
+						  					let wait = read_line() in
+						  					if (wait = ".") then true
+						  					else resolve g ps mgs
 						  				else resolve g ps mgs
 						  			  with
 						  			  | NOT_UNIFIABLE -> resolve g ps mgs;
@@ -118,7 +121,10 @@ let rec solve (goals:goal) (prog:program) (mgus:substitution)= match goals with
 				   						let unifier = mgu (att f) (att g) in
 				   						let newgoal = union (List.map ((fun a t -> subst t a) unifier) (List.map att rest)) 
 				   											(List.map ((fun a t -> subst t a) unifier) (List.map att (snd r))) in
-				   						if solve (List.map tta newgoal) prog (mgs@unifier) then true
+				   						if solve (List.map tta newgoal) prog (mgs@unifier) then
+				   							let wait = read_line() in
+						  					if (wait = ".") then true 
+						  					else resolve g ps mgs 
 				   						else resolve g ps mgs
 				   					   with
 				   					   | NOT_UNIFIABLE -> resolve g ps mgs;
@@ -126,4 +132,6 @@ let rec solve (goals:goal) (prog:program) (mgus:substitution)= match goals with
 				   		)
 		    ) in resolve g0 prog mgus
 ;;
- 
+
+(* prolog solver*)
+let prolog (goals:goal) (prog:program) = solve goals prog [];;
