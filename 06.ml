@@ -87,6 +87,18 @@ let rec tta (x:term) = match x with
 ;;
 
 
+(* Function to print a term *)
+let rec print_term x = match x with
+	V v -> print_string (v^" ")
+	|Node (s,tlist) -> print_string (s^" [");List.iter print_term tlist;print_string "] "
+;;
+
+(* Function to print a subst *)
+let rec print_subst (x:substitution) = match x with
+	[] -> print_string "\n"
+	|x::xs -> print_string (fst x); print_string " -> "; print_term (snd x)
+;;
+
 (* Solve a set of goal clauses with given program clauses *)
 let rec solve (goals:goal) (prog:program) = match goals with
  [] -> true
