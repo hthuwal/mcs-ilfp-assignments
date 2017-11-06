@@ -100,29 +100,30 @@ let rec print_subst (x:substitution) = match x with
 ;;
 
 (* Solve a set of goal clauses with given program clauses *)
-let rec solve (goals:goal) (prog:program) = match goals with
- [] -> true
-|g0::rest-> let rec resolve (g:atomic_formula) (pr:program) = (match pr with
+let rec solve (goals:goal) (prog:program) (mgus:substitution)= match goals with
+ [] -> print_subst mgus;true
+|g0::rest-> let rec resolve (g:atomic_formula) (pr:program) (mgs:substitution) = (match pr with
 			  [] -> false
 			  |p::ps -> (match p with
 						  	Fact f -> (try 
 						  				let unifier = mgu (att f) (att g) in (* mgu of f and g by pretending they are function symbol *)
 						  				let newgoal = List.map ((fun a t -> subst t a) unifier) (List.map att rest) in
-						  				if solve (List.map tta newgoal) prog then true
-						  				else resolve g ps
+						  				if solve (List.map tta newgoal) prog (mgs@unifier) then true
+						  				else resolve g ps mgs
 						  			  with
-						  			  | NOT_UNIFIABLE -> resolve g ps;
+						  			  | NOT_UNIFIABLE -> resolve g ps mgs;
 						  			  )
 					   	  | Rule r -> (try
 					   	  			    let f = fst r in
 				   						let unifier = mgu (att f) (att g) in
 				   						let newgoal = union (List.map ((fun a t -> subst t a) unifier) (List.map att rest)) 
 				   											(List.map ((fun a t -> subst t a) unifier) (List.map att (snd r))) in
-				   						if solve (List.map tta newgoal) prog then true
-				   						else resolve g ps
+				   						if solve (List.map tta newgoal) prog (mgs@unifier) then true
+				   						else resolve g ps mgs
 				   					   with
-				   					   | NOT_UNIFIABLE -> resolve g ps;
+				   					   | NOT_UNIFIABLE -> resolve g ps mgs;
 				   					   )
 				   		)
-		    ) in resolve g0 prog
-;; 
+		    ) in resolve g0 prog mgus
+;;
+ 
