@@ -18,9 +18,11 @@ let goal = [f1];;
 let prog = [Fact f1; Rule r1];;
 
 (* should return true *)
-(* Printf.printf ("%b") (solve goal prog []);; *)
-Printf.printf (" %b\n") (solve [Atom ("Loves",[x;b])] prog []);;
+(* Printf.printf ("%b\n") (prolog goal prog);; *)
+(* Printf.printf ("%b\n") (prolog [Atom ("Loves",[x;b])] prog);; *)
 
 let goal1 = [ Atom ("Loves",[a;x])];;
 let prog1 = [Fact f1; Fact f3; Fact f4];;
-solve goal1 prog1 [];;
+
+prolog goal1 prog1;;
+
