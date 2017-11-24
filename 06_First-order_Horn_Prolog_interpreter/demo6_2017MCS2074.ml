@@ -77,6 +77,94 @@ let q2_5 = [Atom ("cohusband", [arjun;nakul]); Atom ("cowife", [madri; kunti])];
 let q2_6 = [Atom ("cowife", [x;kunti])];;
 
 
+(***** Program 3 ******)
+
+(* Constants *)
+let d = Node ("d", []);;
+let u = Node ("u", []);;
+let t = Node ("t", []);;
+let b = Node ("b", []);;
+let f = Node ("f", []);;
+let a = Node ("a", []);;
+let b = Node ("b", []);;
+let c = Node ("c", []);;
+let xx = Node ("xx", []);;
+let yy = Node ("yy", []);;
+
+(* Variables *)
+let j_var = V "J";;
+let e_var = V "E";;
+let f_var = V "F";;
+let t_var = V "T";;
+let u_var = V "U";;
+let k_var = V "K";;
+let m_var = V "M";;
+let n_var = V "N";;
+let x_var = V "X";;
+let y_yar = V "Y";;
+let z_var = V "Z";;
+
+(* Facts *)
+let f1 = Fact (Atom ("h", [j_var; d; u]));;
+let f2 = Fact (Atom ("h", [j_var; t; b]));;
+let f3 = Fact (Atom ("h", [j_var; f; b]));;
+
+(* Rules *)
+let r1 = Rule(
+	Atom ("h", [j_var; Node ("p", [e_var; f_var]); Node ("r", [t_var; u_var]) ] ),
+	[Atom ("h",[j_var; e_var; t_var]); Atom ("h", [j_var; f_var; u_var])]
+);;
+
+let r2 = Rule(
+	Atom ("h", [j_var; Node ("n", [k_var]); m_var ] ),
+	[Atom ("h", [j_var; k_var; Node ("r",[m_var; n_var])]) ]
+);;
+
+let r3 = Rule(
+	Atom ("h", [j_var; Node ("m", [k_var]); n_var]),
+	[Atom ("h", [j_var; k_var; Node ("r",[m_var; n_var])])]
+);;
+
+(* actual program3 *)
+let program3 = [
+	f1;f2;f3;
+	r1;r2;r3
+];;
+
+(* queries *)
+let q3_1 = [ 
+	Atom (
+		"h", 
+		[
+			Node ("list", [a;b;c]); 
+		 	Node ("p", [t;z_var]);
+			Node ("r", [b;u])
+		]
+	)
+];;
+
+let q3_2 = [
+	Atom (
+		"h",
+		[
+			Node ("list", [xx; yy]);
+			Node ("n", [Node ("p", [t;f])]);
+			u
+		]
+	)
+];;
+
+let q3_3 = [
+	Atom (
+		"h",
+		[
+			Node ("list", [xx; yy]);
+			Node ("n", [Node ("p", [t; y_yar])]);
+			x_var
+		]
+	)
+];;
+
 (***** tests  *****)
 let test5 = try prolog q2_1 program2 with | END -> print_string "true\n";;
 let test6 = try prolog q2_2 program2 with | END -> print_string "true\n";;
@@ -84,3 +172,6 @@ let test7 = try prolog q2_3 program2 with | END -> print_string "true\n";;
 let test8 = try prolog q2_4 program2 with | END -> print_string "true\n";;
 (* let test9 = try prolog q2_5 program2 with | END -> print_string "true\n";;  (* causes infinite loop *) *)
 let test10 = try prolog q2_6 program2 with | END -> print_string "true\n";;
+let test11 = try prolog q3_1 program3 with | END -> print_string "true\n";;
+let test12 = try prolog q3_2 program3 with | END -> print_string "true\n";;
+let test13 = try prolog q3_3 program3 with | END -> print_string "true\n";;
