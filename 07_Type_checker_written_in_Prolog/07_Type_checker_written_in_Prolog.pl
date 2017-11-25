@@ -6,4 +6,17 @@ member(X,[Y|Z]) :- member(X,Z).
 %% Rule for assumption
 hastype(Gamma, X, T) :- member((X,T), Gamma).
 
-mygamma([(v(x),int)]).
+%% Rule for and introduction
+hastype(Gamma, pair(E1, E2), and(T1, T2)):-
+	hastype(Gamma, E1, T1),
+	hastype(Gamma, E2, T2).
+
+%% Rule for and elimination left
+hastype(Gamma, projl(E), T1):-
+	hastype(Gamma, E, and(T1, T2)).
+
+%% Rule for and elimination right
+hastype(Gamma, projr(E), T2):-
+	hastype(Gamma, E, and(T1, T2)).
+
+mygamma([(v(x),int), (v(y),char)]).
