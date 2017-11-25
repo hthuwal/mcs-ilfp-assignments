@@ -1,3 +1,43 @@
+(***** Program 1 *****)
+let l = V "L";;
+let x = V "X";;
+let xs = V "XS";;
+let m = V "M";;
+let z = V "Z";;
+
+(* Facts *)
+let base = Fact(Atom ("append", [Node("mylist",[]); l; l]));;
+
+(* Rules *)
+let others = Rule(
+	Atom (
+		"append",
+		[ 
+			Node ("mylist", [x; xs]); 
+			m; 
+			Node("mylist", [x; z]) 
+		]
+	),
+	[Atom ("append",[ xs; m; z])]
+);;
+
+(* actual program1 *)
+let program1 = [ base; others];;
+
+(* queries *)
+let l1 = Node ("mylist", [Node ("1", [])]);;
+let l2 = Node ("mylist", [Node ("2", []); Node ("mylist", [Node ("3", [])])]);;
+let l3 = Node ("mylist", [Node ("1", []); Node ("mylist", [Node ("3", [])])]);;
+let l4 = Node ("mylist", [Node ("1", []); Node ("mylist", [Node ("2", [])])]);;
+let l5 = Node ("mylist", [Node ("4", []); Node ("mylist", [Node ("5", []); Node ("mylist", [Node ("6", [])])])]);;
+let l6 = Node ("mylist", [Node ("4", []); Node ("mylist", [Node ("5", []); Node ("mylist", [Node ("6", []); Node ("mylist", [Node ("7", []); Node ("mylist", [Node ("8", []); Node ("mylist", [Node ("9", []); Node ("mylist", [Node ("10", [])])])])])])])]);;
+let q1_1 = [Atom ("append", [l1; l2; l3])];;
+let q1_2 = [Atom ("append", [l4; l2; x])];;
+let q1_3 = [Atom ("append", [Node ("mylist",[]); Node ("mylist", [])])];;
+let q1_4 = [Atom ("append", [l5; x; l6])];;
+
+
+
 (***** Program 2 *****)
 
 (* Constants *)
@@ -75,6 +115,7 @@ let q2_3 = [Atom ("married", [x;draupadi])];;
 let q2_4 = [Atom ("married", [x;y])];;
 let q2_5 = [Atom ("cohusband", [arjun;nakul]); Atom ("cowife", [madri; kunti])];;
 let q2_6 = [Atom ("cowife", [x;kunti])];;
+
 
 
 (***** Program 3 ******)
@@ -166,6 +207,11 @@ let q3_3 = [
 ];;
 
 (***** tests  *****)
+let test1 = try prolog q1_1 program1 with | END -> print_string "true\n";;
+let test2 = try prolog q1_2 program1 with | END -> print_string "true\n";;
+let test3 = try prolog q1_3 program1 with | END -> print_string "true\n";;
+let test4 = try prolog q1_4 program1 with | END -> print_string "true\n";;
+
 let test5 = try prolog q2_1 program2 with | END -> print_string "true\n";;
 let test6 = try prolog q2_2 program2 with | END -> print_string "true\n";;
 let test7 = try prolog q2_3 program2 with | END -> print_string "true\n";;
