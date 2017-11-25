@@ -19,4 +19,14 @@ hastype(Gamma, projl(E), T1):-
 hastype(Gamma, projr(E), T2):-
 	hastype(Gamma, E, and(T1, T2)).
 
+%% Rule for implies introduction
+hastype(Gamma, lambda(X,E), arrow(T1, T2)):-
+	hastype(Gamma, X, T1),
+	hastype(Gamma, E, T2).
+
+%% Rule for implies elimination
+hastype(Gamma, apply(E1, E2), T2):-
+	hastype(Gamma, E1, arrow(T1, T2)),
+	hastype(Gamma, E2, T1).
+
 mygamma([(v(x),int), (v(y),char)]).
