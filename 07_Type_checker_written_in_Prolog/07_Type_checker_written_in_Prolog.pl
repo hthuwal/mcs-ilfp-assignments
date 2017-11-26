@@ -100,3 +100,8 @@ mygamma([(4,int), (v(x),int), (x,char), (v(y),char)]).
 %% mygamma(G), hastype(G, inr(X), or(float, int)).
 %% mygamma(G), hastype(G, inr(X), or(float, char)).
 
+%% mygamma(G), hastype(G, case(v(y),4,x,v(x),v(x)), int). % should use second conditon of case
+%% mygamma(G), hastype(G, case(4,4,x,v(x),v(x)), int). % should use first condition of case
+%% mygamma(G), hastype(G, case(E,4,x,v(x),v(x)), int).
+%% mygamma(G), hastype(G, case(E,4,x,v(y),v(y)), char).
+%% mygamma(G), hastype(G, case(E,4,x,v(y),v(y)), Z).
