@@ -92,3 +92,17 @@ mygamma([(4,int), (v(x),int), (x,char), (v(y),char)]).
 %% mygamma(G), hastype(G, apply(lambda(v(y),v(y)),4), char).
 %% hastype(G, apply(lambda(v(x),v(y)),4), char).
 %% hastype(G, apply(lambda(v(x),v(y)),x), char).
+
+%% mygamma(G), hastype(G, inl(4), or(int, float)).
+%% mygamma(G), hastype(G, inl(v(y)), or(int, char)).
+%% hastype(G, inl(v(y)), or(int, char)).
+%% mygamma(G), hastype(G, X, or(int, char)). %% causes infinite loop
+%% mygamma(G), hastype(G, inl(X), or(char, float)).
+
+%% mygamma(G), hastype(G, inr(4), or(int, float)).
+%% mygamma(G), hastype(G, inr(v(y)), or(int, char)).
+%% hastype(G, inr(v(y)), or(int, char)).
+%% mygamma(G), hastype(G, inr(X), or(char, float)). %% causes infinite loop
+%% mygamma(G), hastype(G, inr(X), or(float, int)).
+%% mygamma(G), hastype(G, inr(X), or(float, char)).
+
