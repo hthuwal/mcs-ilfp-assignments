@@ -43,7 +43,14 @@ hastype(Gamma, case(E0, X, Y, EX, EY), T3):-
 	hastype(Gamma, Y, T2),
 	hastype(Gamma, EX, T3),
 	hastype(Gamma, EY, T3),
-	hastype(Gamma, E0, or(T1, T2)).
+	hastype(Gamma, inl(E0), or(T1, T2)).
+
+hastype(Gamma, case(E0, X, Y, EX, EY), T3):-
+	hastype(Gamma, X, T1), 
+	hastype(Gamma, Y, T2),
+	hastype(Gamma, EX, T3),
+	hastype(Gamma, EY, T3),
+	hastype(Gamma, inr(E0), or(T1, T2)).
 
 mygamma([(4,int), (v(x),int), (x,char), (v(y),char)]).
 
