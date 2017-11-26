@@ -29,4 +29,12 @@ hastype(Gamma, apply(E1, E2), T2):-
 	hastype(Gamma, E1, arrow(T1, T2)),
 	hastype(Gamma, E2, T1).
 
+%% Rule for or introduction left
+hastype(Gamma, inl(E), or(T1, T2)):-
+	hastype(Gamma, E, T1).
+
+%% Rule for or introduction right
+hastype(Gamma, inr(E), or(T1, T2)):-
+	hastype(Gamma, E, T2).
+
 mygamma([(v(x),int), (v(y),char)]).
