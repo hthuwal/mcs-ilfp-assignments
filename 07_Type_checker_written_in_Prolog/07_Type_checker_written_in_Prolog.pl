@@ -46,7 +46,19 @@ hastype(Gamma, case(E0, X, Y, EX, EY), T3):-
 	hastype(Gamma, inl(E0), or(T1, T2)) | 
 	hastype(Gamma, inr(E0), or(T1, T2)).
 
-mygamma([(4,int), (v(x),int), (x,char), (v(y),char)]).
+
+%% pair for arbitary length tuples
+hastype(Gamma, pair([]), and([])).
+hastype(Gamma, pair([X|XS]), and([Y|YS])):- 
+	hastype(Gamma, X, Y),
+	hastype(Gamma, pair(XS), and(YS)).
+
+
+%% Proj for arbitary length tuples(projet first element)
+hastype(Gamma, proj1(E), T1):- hastype(Gamma, E, and([T1|_])).
+
+
+%% mygamma([(4,int), (v(x),int), (x,char), (v(y),char)]).
 
 %% Test Queries
 
@@ -105,3 +117,5 @@ mygamma([(4,int), (v(x),int), (x,char), (v(y),char)]).
 %% mygamma(G), hastype(G, case(E,4,x,v(x),v(x)), int).
 %% mygamma(G), hastype(G, case(E,4,x,v(y),v(y)), char).
 %% mygamma(G), hastype(G, case(E,4,x,v(y),v(y)), Z).
+
+%% mygamma(G), hastype(G, pair([4,x,v(x)]), and([X,Y,Z])).
