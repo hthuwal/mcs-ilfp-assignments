@@ -44,5 +44,44 @@ hastype(Gamma, case(E0, X, Y, EX, EY), T3):-
 	hastype(Gamma, EX, T3),
 	hastype(Gamma, EY, T3),
 	hastype(Gamma, E0, or(T1, T2)).
-	
-mygamma([(v(x),int), (v(y),char)]).
+
+mygamma([(4,int), (v(x),int), (x,char), (v(y),char)]).
+
+%% Test Queries
+
+%% mygamma(G), hastype(G, pair(4, v(y)), and(int, char)).
+%% mygamma(G), hastype(G, pair(v(x), v(y)), and(int, char)).
+%% hastype(G, pair(v(x), v(y)), and(int, char)).
+%% mygamma(G), hastype(G, pair(v(x), 4), and(int, char)).
+%% hastype(G, pair(v(x), 4), and(int, char)).
+%% mygamma(G), hastype(G, pair(X, 4), and(int, char)). %% causes infinite loop
+%% mygamma(G), hastype(G, pair(X, Y), and(int, char)).
+
+
+%% mygamma(G), hastype(G, projl(pair(4,4)), int).
+%% mygamma(G), hastype(G, projl(pair(4,4)), X).
+%% mygamma(G), hastype(G, projl(pair(v(y),4)), X).
+%% hastype(G, projl(pair(v(y),4)), char).
+%% mygamma(G), hastype(G, projl(pair(E,4)), char).
+%% mygamma(G), hastype(G, projl(pair(E,F)), int).
+
+%% mygamma(G), hastype(G, projr(pair(4,v(y))), char).
+%% mygamma(G), hastype(G, projr(pair(4,4)), X).
+%% mygamma(G), hastype(G, projr(pair(4,x)), X).
+%% mygamma(G), hastype(G, projr(pair(4,E)), char).
+%% mygamma(G), hastype(G, projr(pair(E,F)), char).
+
+%% mygamma(G), hastype(G, lambda(v(x),4), arrow(int, int)).
+%% mygamma(G), hastype(G, lambda(v(y),4), arrow(int, int)).
+%% hastype(G, lambda(a,b), arrow(int, float)).
+%% mygamma(G), hastype(G, lambda(v(y),4), X).
+%% mygamma(G), hastype(G, lambda(v(y),x), X).
+%% hastype(G, lambda(A,B), arrow(double,string)).
+
+
+%% mygamma(G), hastype(G, apply(lambda(v(x),v(y)),4), int).
+%% mygamma(G), hastype(G, apply(lambda(v(x),v(y)),4), char).
+%% mygamma(G), hastype(G, apply(lambda(v(x),v(y)),x), char).
+%% mygamma(G), hastype(G, apply(lambda(v(y),v(y)),4), char).
+%% hastype(G, apply(lambda(v(x),v(y)),4), char).
+%% hastype(G, apply(lambda(v(x),v(y)),x), char).
